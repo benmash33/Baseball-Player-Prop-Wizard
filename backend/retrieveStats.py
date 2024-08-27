@@ -39,16 +39,21 @@ def get_player_vs_pitcher_stats(batter, pitcher):
         stats[header.text.strip()] = value.text.strip()
     
     # Calculate batting average
-    hits = int(stats.get('H', 0))
+    # hits = int(stats.get('H', 0))
     at_bats = int(stats.get('AB', 0))
-    batting_average = f"{hits / at_bats:.3f}" if at_bats > 0 else "N/A"
+    batting_average = stats.get('AVG', 0)
+    ops = stats.get('OPS', 0)
+    xbh = stats.get('XBH', 0)
     
     return {
         "batter": batter,
         "pitcher": pitcher,
-        "summary": summary_text,
+        "at_bats": at_bats,
+        # "summary": summary_text,
         "batting_average": batting_average,
-        "additional_stats": stats
+        "ops": ops,
+        "xbh": xbh
+        # "additional_stats": stats
     }
 
 # Example usage
