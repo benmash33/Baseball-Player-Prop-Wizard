@@ -5,6 +5,8 @@ const BetMachine = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [history, setHistory] = useState([]);
   const [selectedProp, setSelectedProp] = useState(null);
+  const [playerName, setPlayerName] = useState('');
+  const [pitcherName, setPitcherName] = useState('');
 
   const navigateTo = (page) => {
     setHistory([...history, currentPage]);
@@ -34,13 +36,16 @@ const BetMachine = () => {
     </button>
   );
 
-  const DropdownMenu = ({ label }) => (
+  const TextInput = ({ label, value, onChange }) => (
     <div className="m-4 w-full max-w-xs">
       <label className="block text-xl font-bold mb-2">{label}</label>
-      <select className="block w-full bg-blue-500 text-white py-3 px-4 rounded-lg text-xl">
-        <option>Select {label}</option>
-        {/* Add more options as needed */}
-      </select>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-gray-700 text-white py-3 px-4 rounded-lg text-xl"
+        placeholder={`Enter ${label.toLowerCase()}'s name`}
+      />
     </div>
   );
 
@@ -74,24 +79,40 @@ const BetMachine = () => {
         return (
           <div className="flex flex-col items-center justify-center h-full">
             <BackButton />
-            <h2 className="text-4xl mb-8">Choose Player and Opposing Pitcher:</h2>
+            <h2 className="text-4xl mb-8">Enter Player and Opposing Pitcher:</h2>
             <div className="flex flex-wrap justify-center">
-              <DropdownMenu label="Player" />
-              <DropdownMenu label="Pitcher" />
+              <TextInput 
+                label="Player" 
+                value={playerName} 
+                onChange={(value) => setPlayerName(value)} 
+              />
+              <TextInput 
+                label="Pitcher" 
+                value={pitcherName} 
+                onChange={(value) => setPitcherName(value)} 
+              />
             </div>
-            <Button onClick={() => {}}>Next</Button>
+            <Button onClick={() => console.log(`Player: ${playerName}, Pitcher: ${pitcherName}`)}>Next</Button>
           </div>
         );
       case 'choosePitcherTeam':
         return (
           <div className="flex flex-col items-center justify-center h-full">
             <BackButton />
-            <h2 className="text-4xl mb-8">Choose Pitcher and Opposing Team:</h2>
+            <h2 className="text-4xl mb-8">Enter Pitcher and Opposing Team:</h2>
             <div className="flex flex-wrap justify-center">
-              <DropdownMenu label="Pitcher" />
-              <DropdownMenu label="Team" />
+              <TextInput 
+                label="Pitcher" 
+                value={pitcherName} 
+                onChange={(value) => setPitcherName(value)} 
+              />
+              <TextInput 
+                label="Team" 
+                value={playerName} 
+                onChange={(value) => setPlayerName(value)} 
+              />
             </div>
-            <Button onClick={() => {}}>Next</Button>
+            <Button onClick={() => console.log(`Pitcher: ${pitcherName}, Team: ${playerName}`)}>Next</Button>
           </div>
         );
       case 'gameLines':
