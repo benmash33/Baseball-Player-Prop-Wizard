@@ -8,6 +8,19 @@ const BetMachine = () => {
   const [playerName, setPlayerName] = useState('');
   const [pitcherName, setPitcherName] = useState('');
 
+  const handlePlayerNameChange = (newValue) => {
+    setPlayerName(prevName => newValue);
+  };
+
+  const handlePitcherNameChange = (newValue) => {
+    setPitcherName(prevName => newValue);
+  };
+
+  const handlePropSelection = (prop) => {
+    setSelectedProp(prop);
+    navigateTo('choosePlayerPitcher');
+  };
+
   const navigateTo = (page) => {
     setHistory([...history, currentPage]);
     setCurrentPage(page);
@@ -68,13 +81,14 @@ const BetMachine = () => {
             <BackButton />
             <h2 className="text-4xl mb-8">Choose your Player Prop:</h2>
             <div className="grid grid-cols-2 gap-6">
-              <Button onClick={() => { setSelectedProp('hits'); navigateTo('choosePlayerPitcher'); }}>Hits</Button>
-              <Button onClick={() => { setSelectedProp('rbis'); navigateTo('choosePlayerPitcher'); }}>RBIs</Button>
-              <Button onClick={() => { setSelectedProp('pitcherKs'); navigateTo('choosePitcherTeam'); }}>Pitcher Ks</Button>
-              <Button onClick={() => { setSelectedProp('pitcherBBs'); navigateTo('choosePitcherTeam'); }}>Pitcher BBs</Button>
+              <Button onClick={() => handlePropSelection('hits')}>Hits</Button>
+              <Button onClick={() => handlePropSelection('rbis')}>RBIs</Button>
+              <Button onClick={() => handlePropSelection('pitcherKs')}>Pitcher Ks</Button>
+              <Button onClick={() => handlePropSelection('pitcherBBs')}>Pitcher BBs</Button>
             </div>
           </div>
         );
+
       case 'choosePlayerPitcher':
         return (
           <div className="flex flex-col items-center justify-center h-full">
