@@ -7,13 +7,38 @@ const BetMachine = () => {
   const [selectedProp, setSelectedProp] = useState(null);
   const [playerName, setPlayerName] = useState('');
   const [pitcherName, setPitcherName] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   const handlePlayerNameChange = (newValue) => {
-    setPlayerName(prevName => newValue);
+    setPlayerName(newValue);
   };
 
   const handlePitcherNameChange = (newValue) => {
-    setPitcherName(prevName => newValue);
+    setPitcherName(newValue);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/submit-names', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          player_name: playerName,
+          pitcher_name: pitcherName,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Names submitted successfully:', data);
+        // Handle successful submission (e.g., navigate to next page)
+      } else {
+        setFormErrors(data.errors || {});
+      }
+    } catch (error) {
+      console.error('Error submitting names:', error);
+    }
   };
 
   const handlePropSelection = (prop) => {
@@ -49,7 +74,7 @@ const BetMachine = () => {
     </button>
   );
 
-  const TextInput = ({ label, value, onChange }) => (
+  const TextInput = ({ label, value, onChange, error }) => (
     <div className="m-4 w-full max-w-xs">
       <label className="block text-xl font-bold mb-2">{label}</label>
       <input
@@ -59,6 +84,7 @@ const BetMachine = () => {
         className="w-full bg-gray-700 text-white py-3 px-4 rounded-lg text-xl"
         placeholder={`Enter ${label.toLowerCase()}'s name`}
       />
+      {error && <p className="text-red-500 mt-1">{error}</p>}
     </div>
   );
 
@@ -98,15 +124,22 @@ const BetMachine = () => {
               <TextInput 
                 label="Player" 
                 value={playerName} 
-                onChange={(value) => setPlayerName(value)} 
+                onChange={handlePlayerNameChange}
+                error={formErrors.player_name}
               />
               <TextInput 
                 label="Pitcher" 
                 value={pitcherName} 
-                onChange={(value) => setPitcherName(value)} 
+                onChange={handlePitcherNameChange}
+                error={formErrors.pitcher_name}
               />
             </div>
-            <Button onClick={() => console.log(`Player: ${playerName}, Pitcher: ${pitcherName}`)}>Next</Button>
+            <button 
+              onClick={handleSubmit}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+            >
+              Submit
+            </button>
           </div>
         );
       case 'choosePitcherTeam':
